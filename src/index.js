@@ -29,6 +29,7 @@ class Table {
 
         this._createIndex()
         this._createStyle()
+        this?.callback()
     }
 
     /**
