@@ -17,6 +17,10 @@ class Table {
         /** @type {HTMLTableRowElement[]} */
         this.trArray = []
 
+        /** Number test regex */
+        this.regex = /[0-9.,]*/
+
+        /** Nullable Callback */
         this.callback = callback
 
         if (searchId == null) {
@@ -149,8 +153,10 @@ class Table {
             .forEach((tr) => {
                 let text = tr.querySelector(`td:nth-child(${index})`).innerText.toLocaleLowerCase().trim()
 
-                if (!isNaN(text.replace(",", ""))) {
-                    text = Number(text.replace(",", ""))
+                let parsedNumber = this.regex.exec(text)[0].replace(",", "")
+
+                if (!isNaN(parsedNumber)) {
+                    text = Number(parsedNumber)
                 }
 
                 targets.push({
