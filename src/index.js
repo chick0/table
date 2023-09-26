@@ -153,9 +153,9 @@ class Table {
             .forEach((tr) => {
                 let text = tr.querySelector(`td:nth-child(${index})`).innerText.toLocaleLowerCase().trim()
 
-                let parsedNumber = this.regex.exec(text)[0].replace(",", "")
+                let parsedNumber = this.regex.exec(text)[0].replace(",", "").trim()
 
-                if (!isNaN(parsedNumber)) {
+                if (parsedNumber.length != 0) {
                     text = Number(parsedNumber)
                 }
 
