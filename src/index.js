@@ -8,13 +8,16 @@ class Table {
     /**
      * @param {string} tableId <table> element id
      * @param {string?} searchId Search <input> element id (null for disable search)
+     * @param {function?} callback
      */
-    constructor(tableId, searchId) {
+    constructor(tableId, searchId, callback) {
         /** @type {HTMLTableElement} */
         this.table = document.getElementById(tableId)
 
         /** @type {HTMLTableRowElement[]} */
         this.trArray = []
+
+        this.callback = callback
 
         if (searchId == null) {
             this.searchDisabled = true
@@ -38,6 +41,9 @@ class Table {
             }
             .tb-asc:after {
                 content: " ↑";
+            }
+            .tb-filtered {
+                display: none;
             }
         </style>`
     }
@@ -103,19 +109,21 @@ class Table {
             .querySelectorAll("tr")
             .forEach((tr) => {
                 if (filter.length == 0) {
-                    tr.style = ""
+                    tr.classList.remove("tb-filtered")
                 } else {
                     let parsedSearch = JSON.parse(tr.dataset.search)
-                    tr.style = "display:none"
+                    tr.classList.add("tb-filtered")
 
                     for (let i = 0; i < parsedSearch.length; i++) {
                         if (parsedSearch[i].includes(filter)) {
-                            tr.style = ""
+                            tr.classList.remove("tb-filtered")
                             break
                         }
                     }
                 }
             })
+
+        this?.callback()
     }
 
     /**
@@ -176,5 +184,7 @@ class Table {
             const tr = this.trArray.filter((x) => x.dataset.index == target.index)[0]
             this.table.querySelector("tbody").appendChild(tr)
         })
+
+        this?.callback()
     }
 }
