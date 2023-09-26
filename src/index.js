@@ -57,8 +57,7 @@ class Table {
             .querySelectorAll("th")
             .forEach((th) => {
                 th.dataset.index = indexCtx++
-                th.dataset.orderBy = "desc"
-                th.dataset.className = th.className
+                th.dataset.orderBy = "asc"
 
                 th.addEventListener("click", (event) => {
                     this.sort(event.currentTarget.dataset.index, event.currentTarget.dataset.orderBy)
@@ -91,7 +90,7 @@ class Table {
             .querySelector("tr")
             .querySelectorAll("th")
             .forEach((th) => {
-                th.className = th.dataset.className
+                th.classList.remove("tb-asc", "tb-desc")
             })
     }
 
@@ -134,12 +133,12 @@ class Table {
     sort(index, orderBy) {
         const column = this.table.querySelector("thead").querySelector("tr").querySelector(`th:nth-child(${index})`)
 
-        // Toggle order by
+        // Update next orderBy option
         column.dataset.orderBy = orderBy == "desc" ? "asc" : "desc"
 
-        // Set Arrow hint
-        this._resetColumnArrow()
-        column.className = (column.dataset.className + ` tb-${column.dataset.orderBy}`).trim()
+        // Set <th> arrow
+        this._resetColumnArrow(index)
+        column.classList.add(`tb-${orderBy}`)
 
         /** @type {Context[]} */
         let targets = []
@@ -160,15 +159,13 @@ class Table {
                 return 0
             }
 
-            if (orderBy == "asc") {
-                // ASC
+            if (orderBy == "desc") {
                 if (a.text > b.text) {
                     return -1
                 } else {
                     return 1
                 }
-            } else {
-                // DESC
+            } else if (orderBy == "asc") {
                 if (a.text < b.text) {
                     return -1
                 } else {
