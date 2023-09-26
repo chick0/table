@@ -147,9 +147,15 @@ class Table {
             .querySelector("tbody")
             .querySelectorAll("tr")
             .forEach((tr) => {
+                let text = tr.querySelector(`td:nth-child(${index})`).innerText.toLocaleLowerCase().trim()
+
+                if (!isNaN(text.replace(",", ""))) {
+                    text = Number(text.replace(",", ""))
+                }
+
                 targets.push({
                     index: tr.dataset.index,
-                    text: tr.querySelector(`td:nth-child(${index})`).innerText.toLocaleLowerCase(),
+                    text: text,
                 })
             })
 
