@@ -41,26 +41,40 @@ class Table {
      */
     _createStyle() {
         document.querySelector("head").innerHTML += `<style>
-            .tb-select-block {
+            .tb-table th {
                 -moz-user-select: none;
                 -webkit-user-select: none;
                 -ms-user-select: none;
                 user-select: none;
             }
+
+            .tb-table th:not(.tb-desc):not(.tb-asc):after {
+                content: " 　";
+            }
+
             .tb-desc:after {
                 content: " ↓";
             }
+
             .tb-asc:after {
                 content: " ↑";
             }
+
             .tb-filtered {
                 display: none;
+            }
+
+            .tb-table th,
+            .tb-table td {
+                white-space: nowrap;
             }
         </style>`
     }
 
     _createIndex() {
         let indexCtx = 1
+        this.table.classList.add("tb-table")
+
         this.table
             .querySelector("thead")
             .querySelector("tr")
@@ -68,7 +82,6 @@ class Table {
             .forEach((th) => {
                 th.dataset.index = indexCtx++
                 th.dataset.orderBy = "asc"
-                th.classList.add("tb-select-block")
 
                 th.addEventListener("click", (event) => {
                     this.sort(event.currentTarget.dataset.index, event.currentTarget.dataset.orderBy)
