@@ -21,7 +21,7 @@ class Table {
         this.regex = /[0-9.,]*/
 
         /** Nullable Callback */
-        this.callback = callback
+        this._callback = callback ?? null
 
         if (searchId == null) {
             this.searchDisabled = true
@@ -33,7 +33,13 @@ class Table {
 
         this._createStyle()
         this._createIndex()
-        this?.callback()
+        this.callback()
+    }
+
+    callback() {
+        if (typeof this._callback == "function") {
+            this._callback()
+        }
     }
 
     /**
@@ -147,7 +153,7 @@ class Table {
                 }
             })
 
-        this?.callback()
+        this.callback()
     }
 
     /**
@@ -215,6 +221,6 @@ class Table {
             this.table.querySelector("tbody").appendChild(tr)
         })
 
-        this?.callback()
+        this.callback()
     }
 }
